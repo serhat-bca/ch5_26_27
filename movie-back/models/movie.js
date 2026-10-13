@@ -13,6 +13,15 @@ Movie.init(
     title: {
       type: DataTypes.TEXT,
       allowNull: false,
+      validate: {
+        notEmpty: {
+          msg: "Title can't be an empty text",
+        },
+        len: {
+          args: [2, Infinity],
+          msg: "Title must be at least 2 characters long",
+        },
+      },
     },
     watchlist: {
       type: DataTypes.BOOLEAN,
