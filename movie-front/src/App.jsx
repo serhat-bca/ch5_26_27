@@ -31,39 +31,37 @@ const App = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (movieName) {
-      console.log("Label: ", movieName);
-      const mvObj = {
-        // id: Date.now(),
-        title: movieName,
-        watchlist: false,
-        releaseYear: parseInt(releaseYear) || null,
-      };
-      // make a post request to json-server
-      const newMovie = await movieService.addMovie(mvObj);
-      setNotification(`A new movie added [${newMovie.title}]`);
+
+    try {
+      if (movieName) {
+        console.log("Label: ", movieName);
+        const mvObj = {
+          title: movieName,
+          watchlist: false,
+          releaseYear: parseInt(releaseYear) || null,
+        };
+        const newMovie = await movieService.addMovie(mvObj);
+        setNotification(`A new movie added [${newMovie.title}]`);
+        setTimeout(() => {
+          setNotification(null);
+        }, 3000);
+        setMovielist([...movielist, newMovie]);
+        setMovieName("");
+        setReleaseYear("");
+      } else {
+        setNotification("Movie name is required!");
+        setTimeout(() => {
+          setNotification(null);
+        }, 3000);
+        setReleaseYear("");
+      }
+    } catch (error) {
+      setNotification(error.response.data.error);
       setTimeout(() => {
         setNotification(null);
       }, 3000);
-      setMovielist([...movielist, newMovie]);
       setMovieName("");
-      setReleaseYear("");
-      // axios.post("http://localhost:3001/movies", mvObj).then((response) => {
-      //   // response.data will have the newly created object
-      //   console.log(response.data);
-      //   setMovielist([...movielist, response.data]);
-      //   setMovieName("");
-      //   setReleaseYear("");
-      // });
-    } else {
-      // alert("Please enter a movie name");
-      setNotification("Movie name is required!");
-      setTimeout(() => {
-        setNotification(null);
-      }, 3000);
-      setReleaseYear("");
     }
-    // setMovielist([...movielist, mvObj]);
   };
 
   const handleChange = (e) => {
@@ -83,7 +81,7 @@ const App = () => {
 
       // update the movieList state with the updated movie
       setMovielist(
-        movielist.map((m) => (m.id === updatedMovie.id ? updatedMovie : m))
+        movielist.map((m) => (m.id === updatedMovie.id ? updatedMovie : m)),
       );
     } catch (error) {
       alert(`The movie [${movie.title}] is not in server.`);
