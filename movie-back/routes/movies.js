@@ -44,4 +44,23 @@ router.post("/", async (req, res) => {
   }
 });
 
+router.put("/:id", async (req, res) => {
+  try {
+    const id = req.params.id;
+    const { watchlist } = req.body;
+    if (watchlist === null) {
+      return res.status(400).json({ error: "Watchlist is required" });
+    }
+    const movie = await Movie.findByPk(id);
+    if (!movie) {
+      return res.status(404).json({ error: "Movie not found" });
+    }
+    movie.watchlist = watchlist;
+    await movie.save();
+    res.json(movie);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 module.exports = router;

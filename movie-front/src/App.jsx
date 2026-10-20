@@ -70,12 +70,7 @@ const App = () => {
 
   const toggleWatchlist = async (movie) => {
     const request = { ...movie, watchlist: !movie.watchlist };
-    // const response = await axios.put(
-    //   `http://localhost:3001/movies/${movie.id}`,
-    //   request
-    // );
 
-    // const updatedMovie = response.data;
     try {
       const updatedMovie = await movieService.updateMovie(request);
 
@@ -84,8 +79,8 @@ const App = () => {
         movielist.map((m) => (m.id === updatedMovie.id ? updatedMovie : m)),
       );
     } catch (error) {
-      alert(`The movie [${movie.title}] is not in server.`);
-      setMovielist(movielist.filter((m) => m.id !== movie.id));
+      alert(error.message);
+      // setMovielist(movielist.filter((m) => m.id !== movie.id));
     }
   };
 
