@@ -16,4 +16,9 @@ const updateMovie = async (movie) => {
   return response.data;
 };
 
-export default { getAllMovies, addMovie, updateMovie };
+const deleteMovie = async (movie) => {
+  const response = await axios.delete(`${MOVIE_URL}/${movie.id}`);
+  return response.data;
+};
+
+export default { getAllMovies, addMovie, updateMovie, deleteMovie };

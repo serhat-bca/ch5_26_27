@@ -89,6 +89,18 @@ const App = () => {
     }
   };
 
+  const handleDelete = async (movie) => {
+    try {
+      await movieService.deleteMovie(movie);
+      setMovielist(movielist.filter((m) => m.id !== movie.id));
+    } catch (error) {
+      setNotification("Error deleting movie");
+      setTimeout(() => {
+        setNotification(null);
+      }, 3000);
+    }
+  };
+
   if (movielist == null) {
     return <p>Sorry. Server is down. Try Later</p>;
   }
@@ -101,6 +113,7 @@ const App = () => {
       <FilteredMovies
         filteredMovies={filteredMovies}
         toggleWatchlist={toggleWatchlist}
+        handleDelete={handleDelete}
       />
       <AddMovieForm
         movieName={movieName}
